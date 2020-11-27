@@ -7,6 +7,8 @@ import com.example.accessingdatamysql.second.DAT_HouseHoldDataRepository;
 import com.example.accessingdatamysql.second.DAT_RoomTemp;
 import com.example.accessingdatamysql.second.DAT_RoomTempRepository;
 import com.example.accessingdatamysql.service.MainService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,7 @@ public class MainController {
     @Autowired
     private MainService mainService;
 
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     @GetMapping(path="/add") // Map ONLY POST Requests
     public @ResponseBody
     String addNewUser (@RequestParam String name, @RequestParam Double tem) {
@@ -64,11 +67,12 @@ public class MainController {
                 List<Tbhistory> list=  tbhistoryRepository.findAllByRecordTimeBefore(date);
                 List<DAT_RoomTemp> datas=this.mainService.transferlist(list);
                 if(datas==null){
-                    System.out.println("first transfer is null!");
+                    logger.info("first transfer is null!");
                     return "first transfer is null!" ;
                 }
                 return datas;
             }catch (Exception e){
+                logger.error(e.toString());
                 System.out.println(e);
                 return e.toString();
             }
@@ -91,12 +95,12 @@ public class MainController {
             List<Tbhistory> list=  tbhistoryRepository.findAllByRecordTimeBetween(date1,date);
             List<DAT_RoomTemp> datas=this.mainService.transfer(list,date1);
             if(datas==null){
-                System.out.println("timing first transfer is null!");
+                logger.info("timing first transfer is null!");
                 return "timing transfer is null!" ;
             }
             return datas;
         }catch (Exception e){
-            System.out.println(e);
+            logger.info(e.toString());
             return e.toString();
         }
 
@@ -119,12 +123,12 @@ public class MainController {
             List<Tbhistory> list=  tbhistoryRepository.queryTimeBetween(date1,date);
             List<DAT_RoomTemp> datas=this.mainService.transfer(list,date1);
             if(datas==null){
-                System.out.println("hours first transfer is null!");
+                logger.info("hours first transfer is null!");
                 return "hours transfer is null!" ;
             }
             return datas;
         }catch (Exception e){
-            System.out.println(e);
+            logger.info(e.toString());
             return e.toString();
         }
     }
@@ -146,12 +150,12 @@ public class MainController {
             List<Tbhistory> list=  tbhistoryRepository.queryTimeBetween(date1,date);
             List<DAT_RoomTemp> datas=this.mainService.transfer(list,date1);
             if(datas==null){
-                System.out.println("hours1 first transfer is null!");
+                logger.info("hours1 first transfer is null!");
                 return "hours1 transfer is null!" ;
             }
             return datas;
         }catch (Exception e){
-            System.out.println(e);
+            logger.info(e.toString());
             return e.toString();
         }
     }
@@ -166,12 +170,38 @@ public class MainController {
             List<Tbhistory> list=  tbhistoryRepository.queryTimeBetween(date1,date);
             List<DAT_RoomTemp> datas=this.mainService.transfer(list,date1);
             if(datas==null){
-                System.out.println("timingDate first transfer is null!");
+                logger.info("timingDate first transfer is null!");
                 return "timingDate transfer is null!" ;
             }
             return datas;
         }catch (Exception e){
-            System.out.println(e);
+            logger.info(e.toString());
+            return e.toString();
+        }
+
+    }
+    @GetMapping("/deleteDAT")
+    public @ResponseBody Object deleteDAT(String datetime) {
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date=sdf.parse(datetime);
+            logger.info(date.toString());
+            return this.mainService.deleteDat(date);
+        }catch (Exception e){
+            logger.info(e.toString());
+            return e.toString();
+        }
+
+    }
+    @GetMapping("/deleteTBHistory")
+    public @ResponseBody Object deleteTBHistory(String datetime) {
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date=sdf.parse(datetime);
+            logger.info(date.toString());
+            return this.mainService.deleteTBHistory(date);
+        }catch (Exception e){
+            logger.info(e.toString());
             return e.toString();
         }
 

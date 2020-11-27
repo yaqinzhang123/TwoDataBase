@@ -1,6 +1,7 @@
 package com.example.accessingdatamysql.service;
 
 import com.example.accessingdatamysql.first.Tbhistory;
+import com.example.accessingdatamysql.first.TbhistoryRepository;
 import com.example.accessingdatamysql.second.DAT_HouseHoldData;
 import com.example.accessingdatamysql.second.DAT_HouseHoldDataRepository;
 import com.example.accessingdatamysql.second.DAT_RoomTemp;
@@ -17,7 +18,8 @@ public class MainService {
 
     @Autowired
     private DAT_RoomTempRepository dat_roomTempRepository;
-
+    @Autowired
+    private TbhistoryRepository tbhistoryRepository;
 //    public List<DAT_HouseHoldData> transfer(List<Tbhistory> tbhistorys){
 //        if(tbhistorys==null||tbhistorys.size()==0)
 //            return null;
@@ -52,8 +54,8 @@ public class MainService {
             calendar.add(calendar.MINUTE,5);
             Date date1=calendar.getTime();
             if(tbhistory.getRecordTime().before(date1)){
-                DAT_RoomTemp dat_roomTemp =dat_roomTempRepository.findByRoomTempPointIDAndRoomTempAndGetTime(tbhistory.getDeviceName(),tbhistory.getTem(),tbhistory.getRecordTime());
-                if(dat_roomTemp !=null) {
+                List<DAT_RoomTemp> dat_roomTempList =dat_roomTempRepository.findByRoomTempPointIDAndRoomTempAndGetTime(tbhistory.getDeviceName(),tbhistory.getTem(),tbhistory.getRecordTime());
+                if(dat_roomTempList !=null||dat_roomTempList.size()>0) {
                     continue;
                 }
             }
@@ -109,8 +111,8 @@ public class MainService {
             System.out.print("======="+tbhistorys.size()+"======");
             for (Tbhistory tbhistory:tbhistorys)
             {
-                DAT_RoomTemp dat_roomTemp =dat_roomTempRepository.findByRoomTempPointIDAndRoomTempAndGetTime(tbhistory.getDeviceName(),tbhistory.getTem(),tbhistory.getRecordTime());
-                if(dat_roomTemp !=null) {
+                List<DAT_RoomTemp> dat_roomTemp =dat_roomTempRepository.findByRoomTempPointIDAndRoomTempAndGetTime(tbhistory.getDeviceName(),tbhistory.getTem(),tbhistory.getRecordTime());
+                if(dat_roomTemp !=null||dat_roomTemp.size()>0) {
                     continue;
                 }
                 DAT_RoomTemp data=new DAT_RoomTemp();
@@ -128,5 +130,22 @@ public class MainService {
             e.printStackTrace();
         }
         return datas;
+    }
+    public String deleteDat(Date date){
+        List<DAT_RoomTemp> list=this.dat_roomTempRepository.findAllByGetTimeBefore(date);
+        if(list==null||list.size()==0){
+            return "null";
+        }
+        this.dat_roomTempRepository.deleteInBatch(list);
+        return list.size()+"";
+    }
+
+    public String deleteTBHistory(Date date){
+        List<Tbhistory> list=this.tbhistoryRepository.findAllByRecordTimeBefore(date);
+        if(list==null||list.size()==0){
+            return "null";
+        }
+        this.tbhistoryRepository.deleteInBatch(list);
+        return list.size()+"";
     }
 }
