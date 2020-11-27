@@ -62,7 +62,7 @@ public class MainController {
                 String fom1=sdf.format(date);
                 date=sdf.parse(fom1);
                 List<Tbhistory> list=  tbhistoryRepository.findAllByRecordTimeBefore(date);
-                List<DAT_RoomTemp> datas=this.mainService.transfer(list);
+                List<DAT_RoomTemp> datas=this.mainService.transferlist(list);
                 if(datas==null){
                     System.out.println("first transfer is null!");
                     return "first transfer is null!" ;
@@ -89,7 +89,7 @@ public class MainController {
             String fom1=sdf.format(date1);
             date1=sdf.parse(fom1);
             List<Tbhistory> list=  tbhistoryRepository.findAllByRecordTimeBetween(date1,date);
-            List<DAT_RoomTemp> datas=this.mainService.transfer(list);
+            List<DAT_RoomTemp> datas=this.mainService.transfer(list,date1);
             if(datas==null){
                 System.out.println("timing first transfer is null!");
                 return "timing transfer is null!" ;
@@ -116,8 +116,8 @@ public class MainController {
             System.out.println(date1.toString());
             String fom2=sdf.format(date1);
             date1=sdf.parse(fom2);
-            List<Tbhistory> list=  tbhistoryRepository.findAllByRecordTimeBetween(date1,date);
-            List<DAT_RoomTemp> datas=this.mainService.transfer(list);
+            List<Tbhistory> list=  tbhistoryRepository.queryTimeBetween(date1,date);
+            List<DAT_RoomTemp> datas=this.mainService.transfer(list,date1);
             if(datas==null){
                 System.out.println("hours first transfer is null!");
                 return "hours transfer is null!" ;
@@ -127,5 +127,53 @@ public class MainController {
             System.out.println(e);
             return e.toString();
         }
+    }
+    @GetMapping("/hourtest")
+    public @ResponseBody Object hours1(int i){
+        try{
+            Date date=new   Date();//取时间
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:00:00");
+            String fom1=sdf.format(date);
+            date=sdf.parse(fom1);
+            System.out.println(date.toString());
+            Calendar calendar   =   new GregorianCalendar();
+            calendar.setTime(date);
+            calendar.add(calendar.MINUTE,i);
+            Date date1=calendar.getTime();   //这个时间就是日期往后推一天的结果
+            System.out.println(date1.toString());
+            String fom2=sdf.format(date1);
+            date1=sdf.parse(fom2);
+            List<Tbhistory> list=  tbhistoryRepository.queryTimeBetween(date1,date);
+            List<DAT_RoomTemp> datas=this.mainService.transfer(list,date1);
+            if(datas==null){
+                System.out.println("hours1 first transfer is null!");
+                return "hours1 transfer is null!" ;
+            }
+            return datas;
+        }catch (Exception e){
+            System.out.println(e);
+            return e.toString();
+        }
+    }
+    @GetMapping("/timingDate")
+    public @ResponseBody Object timing(String datetime,String  datetime1){
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date1=sdf.parse(datetime);
+            Date date=sdf.parse(datetime1);
+            System.out.println(date.toString());
+            System.out.println(date1.toString());
+            List<Tbhistory> list=  tbhistoryRepository.queryTimeBetween(date1,date);
+            List<DAT_RoomTemp> datas=this.mainService.transfer(list,date1);
+            if(datas==null){
+                System.out.println("timingDate first transfer is null!");
+                return "timingDate transfer is null!" ;
+            }
+            return datas;
+        }catch (Exception e){
+            System.out.println(e);
+            return e.toString();
+        }
+
     }
 }

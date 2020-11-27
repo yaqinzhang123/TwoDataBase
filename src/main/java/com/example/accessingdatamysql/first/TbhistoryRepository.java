@@ -1,6 +1,7 @@
 package com.example.accessingdatamysql.first;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;
@@ -17,4 +18,6 @@ public interface TbhistoryRepository extends JpaRepository<Tbhistory, Integer> {
 //    List<Tbhistory> findAllByRecordTimeLessThanEqual(Date recordTime);
     List<Tbhistory> findAllByRecordTimeBefore(Date recordTime);
     List<Tbhistory> findAllByRecordTimeAfter(Date recordTime);
+    @Query(value = "select * from tbhistory where recordTime > ?1 and recordTime <= ?2",nativeQuery = true)
+    List<Tbhistory> queryTimeBetween(Date time1, Date Time2);
 }
