@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
@@ -14,12 +16,11 @@ import java.util.Date;
 @Entity
 @Data
 public class DAT_RoomTemp {
-//    @Id
-//    @GeneratedValue(strategy= GenerationType.IDENTITY)
-//    private Integer id;
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer ID;
     private String roomTempPointID;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.000",timezone = "GMT+8")
-    @Id
     private Date getTime;
     private Double roomTemp;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.000",timezone = "GMT+8")

@@ -55,7 +55,7 @@ public class Schedule {
             String fom2=sdf.format(date1);
             date1=sdf.parse(fom2);
             List<Tbhistory> list=  tbhistoryRepository.findAllByRecordTimeBetween(date1,date);
-            List<DAT_HouseHoldData> datas=this.mainService.transfer(list);
+            this.mainService.transfer(list);
         }catch (Exception e){
             System.out.println(e);
         }

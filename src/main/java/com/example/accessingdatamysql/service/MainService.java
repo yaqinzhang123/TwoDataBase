@@ -40,7 +40,7 @@ public class MainService {
 //        this.dat_houseHoldDataRepository.saveAll(datas);
 //        return datas;
 //    }
-    public List<DAT_RoomTemp> transfer(List<Tbhistory> tbhistorys){
+    public List<DAT_RoomTemp> transfer(List<Tbhistory> tbhistorys) throws Exception{
         if(tbhistorys==null||tbhistorys.size()==0)
             return null;
         List<DAT_RoomTemp> datas=new ArrayList<>();
