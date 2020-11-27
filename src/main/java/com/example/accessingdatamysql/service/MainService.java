@@ -43,7 +43,7 @@ public class MainService {
     public List<DAT_RoomTemp> transfer(List<Tbhistory> tbhistorys) throws Exception{
         if(tbhistorys==null||tbhistorys.size()==0)
             return null;
-        List<DAT_RoomTemp> datas=new ArrayList<>();
+        List<DAT_RoomTemp> datas=new ArrayList<DAT_RoomTemp>();
         for (Tbhistory tbhistory:tbhistorys
         ) {
             DAT_RoomTemp dat_roomTemp =dat_roomTempRepository.findByRoomTempPointIDAndRoomTempAndGetTime(tbhistory.getDeviceName(),tbhistory.getTem(),tbhistory.getRecordTime());
