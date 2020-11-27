@@ -40,10 +40,12 @@ public class MainService {
 //        this.dat_houseHoldDataRepository.saveAll(datas);
 //        return datas;
 //    }
-    public List<DAT_RoomTemp> transfer(List<Tbhistory> tbhistorys) throws Exception{
+    public List<DAT_RoomTemp> transfer(List<Tbhistory> tbhistorys) {
+        List<DAT_RoomTemp> datas=new ArrayList<DAT_RoomTemp>();
+        try{
         if(tbhistorys==null||tbhistorys.size()==0)
             return null;
-        List<DAT_RoomTemp> datas=new ArrayList<DAT_RoomTemp>();
+
         for (Tbhistory tbhistory:tbhistorys
         ) {
             DAT_RoomTemp dat_roomTemp =dat_roomTempRepository.findByRoomTempPointIDAndRoomTempAndGetTime(tbhistory.getDeviceName(),tbhistory.getTem(),tbhistory.getRecordTime());
@@ -59,6 +61,9 @@ public class MainService {
         if(datas==null||datas.size()==0)
             return null;
         this.dat_roomTempRepository.saveAll(datas);
+        }catch (Exception e){
+           e.printStackTrace();
+        }
         return datas;
     }
 }
