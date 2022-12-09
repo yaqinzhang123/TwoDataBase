@@ -112,7 +112,7 @@ public class MainService {
             for (Tbhistory tbhistory:tbhistorys)
             {
                 List<DAT_RoomTemp> dat_roomTemp =dat_roomTempRepository.findByRoomTempPointIDAndRoomTempAndGetTime(tbhistory.getDeviceName(),tbhistory.getTem(),tbhistory.getRecordTime());
-                if(dat_roomTemp !=null||dat_roomTemp.size()>0) {
+                if(dat_roomTemp !=null&&dat_roomTemp.size()>0) {
                     continue;
                 }
                 DAT_RoomTemp data=new DAT_RoomTemp();
